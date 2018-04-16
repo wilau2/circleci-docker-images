@@ -1,0 +1,36 @@
+{
+  "name": "docker-image-builder-cli",
+  "version": "0.0.1",
+  "description": "terminal client to help you build docker images",
+  "main": "index.js",
+  "bin": {
+    "dockerium": "./build/dockerium"
+  },
+  "scripts": {
+    "build": "babel --copy-files bin --out-dir build",
+    "start": "npm run build && node build/dockerium.js",
+    "docker:build": "docker build -t williamlauze/test ./build/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilau2/circleci-docker-images.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wilau2/circleci-docker-images/issues"
+  },
+  "homepage": "https://github.com/wilau2/circleci-docker-images#readme",
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "cli-table": "^0.3.1",
+    "commander": "^2.15.1",
+    "inquirer": "^5.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-util-promisify": "^0.2.2"
+  }
+}
