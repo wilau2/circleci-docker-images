@@ -7,5 +7,4 @@ set -o nounset
 
 PATH=$1
 
-gitbook init ${PATH}
 gitbook build ${PATH}

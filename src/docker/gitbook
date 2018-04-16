@@ -1,1 +1,2 @@
 RUN sudo npm install -g gitbook-cli
+RUN gitbook update

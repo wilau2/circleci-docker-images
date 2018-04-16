@@ -34,7 +34,7 @@ const main = async () => {
 
   if(program.build){
     console.log(`building docker image ${program.build} from config`);
-    execSync(`docker build -t ${program.build} ./build/`)
+    execSync(`docker build -t ${program.build} ./bin/`)
   }
 };
 
@@ -81,9 +81,9 @@ const shouldNotBeEmpty = (answer, name) => {
 
 const createDockerfile = async (answers) => {
   let dockerfileContent = "";
-  dockerfileContent += from(answers.base_image);
-  dockerfileContent += copy('scripts', 'scripts');
+  dockerfileContent += from(answers.base_image) + '\r\n';
   dockerfileContent += await addIntegrations(answers.integrations);
+  dockerfileContent += copy('scripts', 'scripts');
   await writeFileAsync(`${__dirname}/Dockerfile`, dockerfileContent);
 };
 
@@ -96,15 +96,15 @@ const addIntegrations = async (integrations) => {
 };
 
 const from = (string) => (
-  `FROM ${writeNewLine(string)}`
+  `FROM ${string}`
 );
 
 const copy = (from, to) => (
-  `COPY ${writeNewLine(`${from} ${to}`)}`
+  writeNewLine(`COPY ${from} ${to}`)
 );
 
 const writeNewLine = (string) => (
-   string + '\r\n'
+  '\r\n' + string
 );
 
 try {

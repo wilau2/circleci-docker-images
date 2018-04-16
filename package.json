@@ -4,13 +4,13 @@
   "description": "terminal client to help you build docker images",
   "main": "index.js",
   "bin": {
-    "dockerium": "./build/dockerium.js"
+    "dockerium": "./bin/dockerium.js"
   },
   "scripts": {
-    "build": "babel --copy-files bin --out-dir build",
+    "build": "babel --copy-files src --out-dir bin",
     "preinstall": "npm run build",
-    "start": "npm run build && node build/dockerium.js",
-    "docker:build": "docker build -t williamlauze/test ./build/"
+    "start": "npm run build && node bin/dockerium.js",
+    "docker:build": "docker build -t williamlauze/test ./bin/"
   },
   "repository": {
     "type": "git",

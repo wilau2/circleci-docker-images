@@ -1,7 +1,4 @@
-# Circleci docker images
-
-## Deploying new versions of images.
-
+# Dockerium
 
 ### Install globally with npm
 
