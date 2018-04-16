@@ -1,0 +1,5 @@
+RUN set -x
+RUN VER="17.03.0-ce"
+RUN curl -L -o /tmp/docker-17.03.0-ce.tgz https://download.docker.com/linux/static/stable/x86_64/docker-17.03.0-ce.tgz
+RUN tar -xz -C /tmp -f /tmp/docker-17.03.0-ce.tgz
+RUN sudo mv /tmp/docker/* /usr/bin
