@@ -34,7 +34,7 @@ const main = async () => {
 
   if(program.build){
     console.log(`building docker image ${program.build} from config`);
-    execSync(`docker build -t ${program.build} ./bin/`)
+    execSync(`docker build -t ${program.build} ./bin/ --no-cache`)
   }
 };
 

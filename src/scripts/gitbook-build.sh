@@ -7,4 +7,4 @@ set -o nounset
 
 PATH=$1
 
-gitbook build ${PATH}
+/usr/local/bin/nodejs /usr/local/lib/node_modules/gitbook-cli/bin/gitbook.js build ${PATH}
