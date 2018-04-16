@@ -1,0 +1,1 @@
+{"base_image":"circleci/node:8","integrations":["docker"]}

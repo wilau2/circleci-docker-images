@@ -1,0 +1,12 @@
+{
+  "base_image": "circleci/node:8",
+  "integrations": [
+    "codepush",
+    "firebase"
+  ],
+  "scripts": true,
+  "circleci_template": true,
+  "circleci_commit_lint_step": true,
+  "circleci_build_infra_step": true,
+  "circleci_gitbook_firebase_step": true
+}

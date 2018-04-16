@@ -1,2 +1,2 @@
-RUN npm install -g cordova
-RUN npm install -g appcenter-cli
+RUN sudo npm install -g cordova
+RUN sudo npm install -g appcenter-cli

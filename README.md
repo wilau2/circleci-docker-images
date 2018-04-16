@@ -2,7 +2,16 @@
 
 ## Deploying new versions of images.
 
+
+### Install globally with npm
+
 ```
-node bin/dockerium
 npm install -g
+dockerium --interactive --save <config output path> --build <org/imagename:version>
+```
+
+### Use from this repo
+```
+npm install
+npm run start -- --interactive --save <config output path> --build <org/imagename:version>
 ```

@@ -5,7 +5,7 @@ import inquirer from 'inquirer';
 import fs from 'fs';
 import pkg from '../package';
 import { promisify } from 'util';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 
 const writeFileAsync = promisify(fs.writeFile);
 const readFileAsync = promisify(fs.readFile);
@@ -13,58 +13,66 @@ const readDirAsync = promisify(fs.readdir);
 
 program
   .version(pkg.version)
-  .option('-d, --development', 'Development mode')
-  .option('-i, --interactive', 'Interactive mode')
-  .option('-b, --build', 'Build docker image')
+  .usage('[options]')
+  .option('-f, --file [path]', 'input file')
+  .option('-d, --development', 'development mode')
+  .option('-i, --interactive', 'interactive mode')
+  .option('-s, --save [path]', 'save output file')
+  .option('-b, --build [tag]', 'build docker image')
   .parse(process.argv);
 
-
 console.log('You are building a docker image for circleci');
-let test = async () => {
-  const integrations = await readDirAsync(`${__dirname}/docker`);
+const main = async () => {
 
-  let answers;
-  if (program.development) {
-    answers = {
-      "base_image": "circleci/node:8",
-      "integrations": [
-        "codepush",
-        "firebase"
-      ],
-      "scripts": true,
-      "circleci_template": true,
-      "circleci_commit_lint_step": true,
-      "circleci_build_infra_step": true,
-      "circleci_gitbook_firebase_step": true
-    };
-  } else {
-    answers = await inquirer.prompt([
-      {
-        type: 'input',
-        message: 'Type initial docker image name?',
-        name: 'base_image',
-        default: 'circleci/node:8',
-        validate: function(answer) {
-          shouldNotBeEmpty(answer, this.name);
-          if (!answer.includes("circleci/")) return "Base image should contain circleci/";
-          return true;
-        },
-      },
-      {
-        type: 'checkbox',
-        message: 'Select integrations',
-        name: 'integrations',
-        choices: integrations.map((integration) => ({name: integration})),
-      },
-    ])
-  }
-
-  console.log(JSON.stringify(answers, null, '  '));
+  const answers = await getAnswers(program);
   await createDockerfile(answers);
 
-  if(program.build){
-    exec()
+  if(program.save) {
+    console.log("saving config to external file");
+    await writeFileAsync(program.save, JSON.stringify(answers))
   }
+
+  if(program.build){
+    console.log(`building docker image ${program.build} from config`);
+    execSync(`docker build -t ${program.build} ./build/`)
+  }
+};
+
+const getAnswers = async (program) => {
+  let answers;
+  if (program.development) {
+    answers = JSON.parse(await readFileAsync(`${__dirname}/mocked_answers.json`));
+  } else if (program.file) {
+    console.log(program.file);
+    answers = JSON.parse(await readFileAsync(program.file));
+  } else {
+    answers = await prompt();
+  }
+  console.log(JSON.stringify(answers, null, '  '));
+  return answers;
+};
+
+const prompt = async () => {
+  const integrations = await readDirAsync(`${__dirname}/docker`);
+  return await inquirer.prompt([
+    {
+      type: 'input',
+      message: 'Type initial docker image name?',
+      name: 'base_image',
+      default: 'circleci/node:8',
+      validate: function(answer) {
+        shouldNotBeEmpty(answer, this.name);
+        if (!answer.includes("circleci/")) return "Base image should contain circleci/";
+        return true;
+      },
+    },
+    {
+      type: 'checkbox',
+      message: 'Select integrations',
+      name: 'integrations',
+      choices: integrations.map((integration) => ({name: integration})),
+    },
+  ])
 };
 
 const shouldNotBeEmpty = (answer, name) => {
@@ -76,11 +84,7 @@ const createDockerfile = async (answers) => {
   dockerfileContent += from(answers.base_image);
   dockerfileContent += copy('scripts', 'scripts');
   dockerfileContent += await addIntegrations(answers.integrations);
-  try {
-    await writeFileAsync(`${__dirname}/Dockerfile`, dockerfileContent);
-  } catch (error) {
-    console.error(error);
-  }
+  await writeFileAsync(`${__dirname}/Dockerfile`, dockerfileContent);
 };
 
 const addIntegrations = async (integrations) => {
@@ -103,6 +107,11 @@ const writeNewLine = (string) => (
    string + '\r\n'
 );
 
-test();
+try {
+  main();
+} catch (error) {
+  console.error(error);
+}
+
 
 
