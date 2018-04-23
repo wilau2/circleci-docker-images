@@ -1,7 +1,12 @@
 {
-  "plugins": ["transform-async-to-generator","transform-util-promisify",
-    ["transform-es2015-modules-commonjs", {
-      "allowTopLevelThis": true
-    }]
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-util-promisify",
+    [
+      "transform-es2015-modules-commonjs",
+      {
+        "allowTopLevelThis": true
+      }
+    ]
   ]
 }

@@ -16,25 +16,23 @@ program
   .usage('[options]')
   .option('-f, --file [path]', 'input file')
   .option('-d, --development', 'development mode')
-  .option('-i, --interactive', 'interactive mode')
   .option('-s, --save [path]', 'save output file')
   .option('-b, --build [tag]', 'build docker image')
   .parse(process.argv);
 
 console.log('You are building a docker image for circleci');
 const main = async () => {
-
   const answers = await getAnswers(program);
   await createDockerfile(answers);
 
-  if(program.save) {
-    console.log("saving config to external file");
-    await writeFileAsync(program.save, JSON.stringify(answers))
+  if (program.save) {
+    console.log('saving config to external file');
+    await writeFileAsync(program.save, JSON.stringify(answers));
   }
 
-  if(program.build){
+  if (program.build) {
     console.log(`building docker image ${program.build} from config`);
-    execSync(`docker build -t ${program.build} ./bin/ --no-cache`)
+    execSync(`docker build -t ${program.build} ./bin/ --no-cache`);
   }
 };
 
@@ -43,7 +41,6 @@ const getAnswers = async (program) => {
   if (program.development) {
     answers = JSON.parse(await readFileAsync(`${__dirname}/mocked_answers.json`));
   } else if (program.file) {
-    console.log(program.file);
     answers = JSON.parse(await readFileAsync(program.file));
   } else {
     answers = await prompt();
@@ -62,7 +59,7 @@ const prompt = async () => {
       default: 'circleci/node:8',
       validate: function(answer) {
         shouldNotBeEmpty(answer, this.name);
-        if (!answer.includes("circleci/")) return "Base image should contain circleci/";
+        if (!answer.includes('circleci/')) return 'Base image should contain circleci/';
         return true;
       },
     },
@@ -70,17 +67,17 @@ const prompt = async () => {
       type: 'checkbox',
       message: 'Select integrations',
       name: 'integrations',
-      choices: integrations.map((integration) => ({name: integration})),
+      choices: integrations.map((integration) => ({ name: integration })),
     },
-  ])
+  ]);
 };
 
 const shouldNotBeEmpty = (answer, name) => {
-  if (answer === "") return `${name} should not be empty`;
+  if (answer === '') return `${name} should not be empty`;
 };
 
 const createDockerfile = async (answers) => {
-  let dockerfileContent = "";
+  let dockerfileContent = '';
   dockerfileContent += from(answers.base_image) + '\r\n';
   dockerfileContent += await addIntegrations(answers.integrations);
   dockerfileContent += copy('scripts', 'scripts');
@@ -95,23 +92,17 @@ const addIntegrations = async (integrations) => {
   return files.join('\r\n');
 };
 
-const from = (string) => (
-  `FROM ${string}`
+const from = (string) => `FROM ${string}`;
+
+const copy = (from, to) => writeNewLine(`COPY ${from} ${to}`);
+
+const writeNewLine = (string) => '\r\n' + string;
+
+main().then(
+  () => {
+    console.log('Success');
+  },
+  () => {
+    console.error('Something went wrong');
+  },
 );
-
-const copy = (from, to) => (
-  writeNewLine(`COPY ${from} ${to}`)
-);
-
-const writeNewLine = (string) => (
-  '\r\n' + string
-);
-
-try {
-  main();
-} catch (error) {
-  console.error(error);
-}
-
-
-

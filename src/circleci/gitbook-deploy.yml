@@ -1,0 +1,24 @@
+version: 2
+references:
+  gitbook-deploy-container: &gitbook-deploy
+    docker:
+      - image: williamlauze/gitbookdeploy:latest
+    working-directory: ~/repo
+
+jobs:
+  gitbook-deploy:
+    <<: *gitbook-deploy
+    steps:
+      - checkout
+      - run:
+          name: gitbook deploy on firebase
+          command: |
+            sh /scripts/gitbook-build.sh ${GITBOOK_PATH}
+            sh /scripts/gitbook-firebase-init.sh ${GITBOOK_PATH}/_book ${GITBOOK_FIREBASE_APP}
+            sh /scripts/firebase-deploy-only-hosting.sh gitbook ${GITBOOK_FIREBASE_TOKEN}
+
+workflows:
+  version: 2
+  a-pipeline:
+    jobs:
+      - gitbook-deploy

@@ -1,0 +1,22 @@
+version: 2
+references:
+  commitlint-container: &commitlint-step
+    docker:
+      - image: williamlauze/circleci-commitlint:latest
+    working-directory: ~/repo
+
+jobs:
+  commitlint:
+    <<: *commitlint-step
+    steps:
+      - checkout
+      - run:
+          name: commitlint
+          command: |
+            /bin/sh /.scripts/commitlint_range.sh
+
+workflows:
+  version: 2
+  a-pipeline:
+    jobs:
+      - commitlint
