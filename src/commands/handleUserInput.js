@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import readDirAsync from '../fs-async/readDir';
+import { readDir } from '../fs-async';
 
 const getPipelineNameChoices = (configFile) => {
   if (configFile.workflows) {
@@ -15,7 +15,7 @@ const getEnhancementChoices = (enhancements) => {
 };
 
 export default async (configFile) => {
-  const enhancements = await readDirAsync(`${__dirname}/../circleci`);
+  const enhancements = await readDir(`${__dirname}/../circleci`);
   return await inquirer.prompt([
     {
       type: 'list',

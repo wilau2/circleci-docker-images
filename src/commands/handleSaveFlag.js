@@ -1,16 +1,16 @@
 import yaml from 'js-yaml';
-import writeFileAsync from '../fs-async/writeFile';
-import fs from 'fs';
+import { writeFile, exists, mkdir } from '../fs-async';
+
 export default async (saveFlag, initFlag, inputFile) => {
   const yamlInputFile = yaml.safeDump(inputFile);
   if (saveFlag) {
-    await writeFileAsync(saveFlag, yamlInputFile);
+    await writeFile(saveFlag, yamlInputFile);
   }
   if (initFlag) {
     const dir = `${__dirname}/../../.circleci`;
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+    if (!exists(dir)) {
+      mkdir(dir);
     }
-    await writeFileAsync(`${dir}/config.yml`, yamlInputFile);
+    await writeFile(`${dir}/config.yml`, yamlInputFile);
   }
 };

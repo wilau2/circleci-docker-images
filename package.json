@@ -10,9 +10,10 @@
     "precommit": "lint-staged",
     "commit": "git-cz",
     "build": "babel --copy-files src --out-dir bin",
-    "dockerium": "npm run build && node bin/dockerium.js",
-    "cci-tools": "npm run build && node bin/circleci-tools.js",
-    "test": "jest src --coverage",
+    "dockerium": "npm run build && node --trace-sync-io bin/dockerium.js",
+    "cci-tools": "npm run build && node --trace-sync-io bin/circleci-tools.js",
+    "test": "jest src",
+    "test:ci": "jest src --coverage",
     "test:watch": "jest src --watchAll",
     "docker:build": "docker build -t williamlauze/test ./bin/"
   },

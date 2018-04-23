@@ -1,10 +1,10 @@
 import yaml from 'js-yaml';
-import readFileAsync from '../fs-async/readFile';
+import { readFile } from '../fs-async';
 import MandatoryFileOrInitOptionFlagError from './MandatoryFileInputFlagError';
 
 export default async function handleConfigFile(file, init) {
   if (file) {
-    return yaml.safeLoad(await readFileAsync(file));
+    return yaml.safeLoad(await readFile(file));
   } else if (init) {
     return {};
   }

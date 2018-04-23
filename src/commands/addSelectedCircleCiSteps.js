@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import readFile from '../fs-async/readFile';
+import { readFile } from '../fs-async';
 
 const handleAddReferences = (config, enhancementName, enhancementYml) => {
   const referenceName = `${enhancementName}-container`;
