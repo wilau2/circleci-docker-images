@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { readDir } from '../fs-async';
+import { readDir } from '../../lib/fs-async';
 
 const getPipelineNameChoices = (configFile) => {
   if (configFile.workflows) {

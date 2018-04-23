@@ -1,1 +1,5 @@
-export default class MandatoryFileInputFlagError extends Error {}
+export default class MandatoryFileInputFlagError extends Error {
+  MandatoryFileInputFlagError() {
+    this.message = 'MandatoryFileOrInitOptionFlagError';
+  }
+}

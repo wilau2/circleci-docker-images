@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { readFile } from '../fs-async';
+import { readFile } from '../../lib/fs-async';
 import MandatoryFileOrInitOptionFlagError from './MandatoryFileInputFlagError';
 
 export default async function handleConfigFile(file, init) {
@@ -8,5 +8,5 @@ export default async function handleConfigFile(file, init) {
   } else if (init) {
     return {};
   }
-  throw new MandatoryFileOrInitOptionFlagError('MandatoryFileOrInitOptionFlagError');
+  throw new MandatoryFileOrInitOptionFlagError();
 }

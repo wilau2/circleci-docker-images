@@ -1,15 +1,15 @@
 jest.mock('inquirer');
-jest.mock('../../fs-async/readDir', () =>
-  jest.fn().mockImplementation(() => ['enhancement1.yml', 'enhancement2.yml']),
-);
+jest.mock('../../../lib/fs-async', () => ({
+  readDir: jest.fn().mockImplementation(() => ['enhancement1.yml', 'enhancement2.yml']),
+}));
 import handleUserInput from '../handleUserInput';
 import inquirer from 'inquirer';
-import readDirAsync from '../../fs-async/readDir';
+import { readDir } from '../../../lib/fs-async';
 
 describe('when handleUserInput', () => {
   it('should call readDirAsync', async () => {
     await handleUserInput({});
-    expect(readDirAsync).toHaveBeenCalled();
+    expect(readDir).toHaveBeenCalled();
   });
   describe('and has workflow', () => {
     const configFile = { workflows: { pipelineName: [] } };
