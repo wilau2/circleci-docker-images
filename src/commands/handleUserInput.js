@@ -15,7 +15,7 @@ const getEnhancementChoices = (enhancements) => {
 };
 
 export default async (configFile) => {
-  const enhancements = await readDirAsync(`${__dirname}/circleci`);
+  const enhancements = await readDirAsync(`${__dirname}/../circleci`);
   return await inquirer.prompt([
     {
       type: 'list',

@@ -1,0 +1,40 @@
+references:
+  commitlint-container:
+    docker: &ref_0
+      - image: 'williamlauze/circleci-commitlint:latest'
+    working-directory: ~/repo
+  gitbook-deploy-container:
+    docker: &ref_1
+      - image: 'williamlauze/gitbookdeploy:latest'
+    working-directory: ~/repo
+jobs:
+  commitlint:
+    docker: *ref_0
+    working-directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: commitlint
+          command: |
+            /bin/sh /.scripts/commitlint_range.sh
+  gitbook-deploy:
+    docker: *ref_1
+    working-directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: gitbook deploy on firebase
+          command: >
+            sh /scripts/gitbook-build.sh ${GITBOOK_PATH}
+
+            sh /scripts/gitbook-firebase-init.sh ${GITBOOK_PATH}/_book
+            ${GITBOOK_FIREBASE_APP}
+
+            sh /scripts/firebase-deploy-only-hosting.sh gitbook
+            ${GITBOOK_FIREBASE_TOKEN}
+workflows:
+  version: 2
+  default-pipeline-name:
+    jobs:
+      - commitlint
+      - gitbook-deploy
