@@ -1,0 +1,2 @@
+RUN apk update
+RUN apk add curl curl-dev bash jq git wget

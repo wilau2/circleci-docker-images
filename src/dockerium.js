@@ -59,7 +59,6 @@ const prompt = async () => {
       default: 'circleci/node:8',
       validate: function(answer) {
         shouldNotBeEmpty(answer, this.name);
-        if (!answer.includes('circleci/')) return 'Base image should contain circleci/';
         return true;
       },
     },
