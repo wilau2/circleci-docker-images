@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { writeFile, exists, mkdir } from '../../lib/fs-async';
+import { writeFile, exists, mkdir } from '../lib/fs-async';
 
 export default async (saveFlag, initFlag, inputFile) => {
   let filePath;

@@ -2,7 +2,7 @@ jest.mock('js-yaml');
 jest.mock('../../../lib/fs-async');
 import handleSaveFlag from '../handleSaveFlag';
 import yaml from 'js-yaml';
-import { writeFile } from '../../../lib/fs-async';
+import { writeFile } from '../../lib/fs-async';
 
 describe('when handleSaveFlag', () => {
   const inputFile = '{"myConfig": "test"}';

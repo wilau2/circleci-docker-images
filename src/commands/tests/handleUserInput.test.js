@@ -4,7 +4,7 @@ jest.mock('../../../lib/fs-async', () => ({
 }));
 import handleUserInput from '../handleUserInput';
 import inquirer from 'inquirer';
-import { readDir } from '../../../lib/fs-async';
+import { readDir } from '../../lib/fs-async';
 
 describe('when handleUserInput', () => {
   it('should call readDirAsync', async () => {
